@@ -1,2 +1,5 @@
 archive (1)/
 __pycache__/
+checkpoints/
+figures/
+results/
