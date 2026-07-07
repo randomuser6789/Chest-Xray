@@ -1,58 +1,64 @@
 # Chest X-Ray Multi-Label Classification with Calibration Analysis
 
-A DenseNet-121 classifier for three thoracic findings on NIH ChestX-ray14, with a focus on
-calibration and failure analysis rather than headline AUC alone. The central finding:
-class-weighted training produces strong ranking but severely miscalibrated probabilities, and
-the standard fix (temperature scaling) cannot correct it — while Platt scaling can, at no cost
-to AUC.
+A DenseNet-121 classifier for three thoracic findings on NIH ChestX-ray14. The emphasis is on
+calibration and failure analysis, not just AUC. The short version: class-weighted training
+gives you strong ranking but badly miscalibrated probabilities. Temperature scaling, the usual
+fix, doesn't help. Platt scaling does, and it costs nothing in AUC.
 
-## Findings at a glance
+## Summary
 
-- **Discrimination**: Test AUC of 0.84 (Pneumothorax), 0.82 (Effusion), 0.89 (Cardiomegaly) on
-  the official patient-disjoint test split.
-- **Calibration**: Training with `pos_weight` inflated predicted probabilities to 4–5× the base
-  rate. Temperature scaling failed to correct this (ECE unchanged or worse); per-class Platt
-  scaling reduced ECE by ~10× (e.g. Effusion 0.35 → 0.006) with AUC provably unchanged.
-- **Failure taxonomy**: An evidence-based (non-diagnostic) analysis of the model's 90
-  highest-confidence errors, using patient history and label co-occurrence rather than visual
-  reads. A concrete label-noise case is documented where the model tracks a stable signal
-  across a patient's visits while the NIH label intermittently drops the finding.
+Test AUC lands at 0.84 for Pneumothorax, 0.82 for Effusion, 0.89 for Cardiomegaly, on the
+official patient-disjoint split.
+
+The interesting part is the calibration. Training with `pos_weight` pushed predicted
+probabilities to 4–5× the base rate. Temperature scaling left that basically unchanged.
+Per-class Platt scaling cut ECE by roughly 10× (Effusion went from 0.35 to 0.006) without
+moving AUC.
+
+There's also a failure taxonomy: an evidence-based walk through the model's 90
+highest-confidence errors, using patient history and label co-occurrence instead of reading the
+films. One patient's history turns out to be a clean illustration of label noise, where the
+model holds a steady prediction across visits while the NIH label keeps dropping and re-adding
+the finding.
 
 ## Dataset
 
-NIH ChestX-ray14: 112,120 frontal chest X-rays, 30,805 patients, pre-resized to 224×224.
-Target findings: Pneumothorax, Effusion, Cardiomegaly (prevalence ~5%, ~12%, ~2.5% overall —
-heavily imbalanced).
+NIH ChestX-ray14: 112,120 frontal chest X-rays from 30,805 patients, pre-resized to 224×224.
+The three target findings (Pneumothorax, Effusion, Cardiomegaly) sit at roughly 5%, 12%, and
+2.5% prevalence, so the classes are heavily imbalanced.
 
-The official patient-level split (`train_val_list` / `test_list`) is used and verified
-patient-disjoint, so no patient appears in both training and test. A 90/10 patient-disjoint
-validation split is carved from train_val for checkpoint selection and calibration fitting.
+I used the official patient-level split and checked that it's actually patient-disjoint (no
+patient in both train and test). The validation set is a 90/10 patient-disjoint carve-out of
+train_val, used for checkpoint selection and for fitting the calibration.
 
-Known data limitations addressed in this project:
-- Labels are NLP-extracted from radiology reports, not radiologist-verified — a documented
-  source of label noise, central to the failure analysis.
-- 16 records carry impossible ages (>100, up to 414) from a known metadata overflow bug; these
-  are filtered.
-- 27 records encode sub-year ages in months/days; these are converted to fractional years
-  rather than dropped.
+A few data issues I had to handle:
+- The labels are NLP-extracted from radiology reports, not checked by radiologists. That's a
+  known source of noise, and it's what the failure analysis ends up circling back to.
+- 16 records have impossible ages (over 100, one at 414) from a documented metadata bug.
+  Filtered out.
+- 27 records store sub-year ages in months or days. I converted these to fractional years
+  instead of dropping them.
 
 ## Method
 
-- **Model**: DenseNet-121 pretrained on ImageNet, final classifier replaced with a 3-way
-  multi-label head, full fine-tuning. Single-channel X-rays expanded to 3 channels for the
-  pretrained weights.
-- **Training**: `BCEWithLogitsLoss` with per-class `pos_weight` (negatives/positives) to handle
-  imbalance. AdamW, LR 1e-4, 8 epochs, best checkpoint by validation macro-AUC (epoch 7, val
-  macro-AUC 0.887). Apple Silicon MPS.
-- **Calibration**: Post-hoc per-class temperature scaling and Platt scaling, both fit on
-  validation logits only and applied to test.
-- **Evaluation**: Per-class test AUC, ECE (10-bin), reliability diagrams, and subgroup AUC + ECE
-  by sex and age bucket, with a minimum-positive-count guard (n_pos ≥ 10) so thin subgroups
-  report NA rather than noise.
+DenseNet-121 pretrained on ImageNet, classifier swapped for a 3-way multi-label head, fully
+fine-tuned. The X-rays are single-channel and get expanded to 3 channels to match the pretrained
+weights.
+
+Loss is `BCEWithLogitsLoss` with per-class `pos_weight` (negatives over positives) for the
+imbalance. AdamW at 1e-4, 8 epochs, keeping the best checkpoint by validation macro-AUC. I
+stopped at 8 because the val curve started overfitting there: epoch 8's train loss kept
+dropping while val loss ticked back up, and the best checkpoint landed at epoch 7 (val
+macro-AUC 0.887). All on Apple Silicon MPS, which is slow but works.
+
+Calibration is post-hoc, both temperature and Platt scaling, fit on validation logits and
+applied to test. Evaluation covers per-class test AUC, ECE (10-bin), reliability diagrams, and
+subgroup AUC and ECE by sex and age. Subgroups with fewer than 10 positives report NA instead of
+a noisy number.
 
 ## Results
 
-### Discrimination (test set, n = 25,592)
+Discrimination on the test set (n = 25,592):
 
 | Finding      | Test AUC |
 |--------------|----------|
@@ -60,15 +66,14 @@ Known data limitations addressed in this project:
 | Effusion     | 0.823    |
 | Cardiomegaly | 0.885    |
 
-Performance is stable across sex and across the well-populated age buckets. The 80+ bucket
-(n=252) is underpowered and its numbers are reported but flagged as noisy rather than
-interpreted.
+Performance holds up across sex and across the age buckets that have enough data. The 80+
+bucket (n=252) is too small to read into, so I report it but don't lean on it.
 
-### Calibration: the main finding
+### Calibration
 
-Weighted-loss training left the model badly miscalibrated — predicted probabilities for true
-negatives averaged 4–5× the base rate (e.g. Cardiomegaly negatives averaged ~20% predicted
-probability against a ~4% base rate).
+This is where the model looks worse than the AUC suggests. Weighted-loss training left it
+badly miscalibrated. True negatives for Cardiomegaly averaged around 20% predicted probability
+against a base rate near 4%, and the other two classes show the same inflation.
 
 | Finding      | ECE raw | ECE temperature | ECE Platt |
 |--------------|---------|------------------|-----------|
@@ -76,90 +81,83 @@ probability against a ~4% base rate).
 | Effusion     | 0.347   | 0.341            | 0.006     |
 | Cardiomegaly | 0.178   | 0.196            | 0.018     |
 
-**Why temperature scaling fails and Platt scaling works**: the miscalibration here is a
-systematic upward shift in probabilities, not uniform overconfidence. Temperature scaling has
-only a scale parameter — it shrinks a sigmoid symmetrically toward 0.5 and cannot translate the
-distribution downward. Platt scaling adds an intercept (`sigmoid(a·logit + b)`); the fitted
-intercepts were strongly negative (b ≈ −2.3 to −3.6), which is exactly the shift the
-distribution needed. AUC is unchanged under both (fitted a > 0 keeps the transform monotonic —
-verified to ~1e-8).
+The reason temperature scaling can't fix this comes down to what the miscalibration actually
+is. It's a systematic upward shift, and temperature scaling only has a scale parameter, so it
+can pull a sigmoid toward 0.5 but can't slide the whole distribution down. Platt scaling adds an
+intercept via `sigmoid(a·logit + b)`, and the fitted intercepts came out strongly negative (b
+around −2.3 to −3.6), which is exactly the downward shift the probabilities needed. Since every
+fitted a is positive, the transform is monotonic and AUC is unchanged.
 
-Reliability diagrams (raw / temperature / Platt) for each class are in `figures/`.
-
-Per-subgroup ECE (sex, age) is in `results/eval_results.csv`. A couple of cells show elevated
-ECE from small-sample noise rather than systematic miscalibration — most visibly the 80+ age
-bucket (n=252, n_pos as low as 18) — treat these as thin-cell variance, not a subgroup effect.
+Per-subgroup ECE is in `results/eval_results.csv`. A few cells run high on small-sample noise,
+most obviously the 80+ bucket (n=252, as few as 18 positives), so those are thin-cell variance
+rather than a real subgroup effect. Reliability diagrams for all three classes, raw and both
+scalings, are in `figures/`.
 
 ### Failure taxonomy
 
-The model's 90 highest-confidence errors (15 false positives + 15 false negatives per class,
-ranked on calibrated probabilities) were categorized using patient history and label
-co-occurrence — not visual diagnosis (neither the author nor the tooling is a radiologist).
+I pulled the model's 90 highest-confidence errors (15 false positives and 15 false negatives
+per class, ranked on the calibrated probabilities) and sorted them using patient history and
+label co-occurrence. I'm not a radiologist and neither is the tooling, so none of this rests on
+reading the actual images.
 
-- **Candidate label noise — chronic finding not restated (30 cases)**. High-confidence false
-  positives where the same patient is positive for the finding in other scans. Consistent with
-  ChestX-ray14's per-report labeling, where chronic findings are often not restated at each
-  follow-up visit.
-- **Co-occurrence / entangled-label confusion (27 cases)**. Errors that track a correlated
-  finding (Effusion↔Cardiomegaly, Emphysema↔Pneumothorax). Notably, 9 of 15 Cardiomegaly false
-  negatives co-list Effusion — one hypothesis (untested) is that shared visual features draw
-  attention away from cardiomegaly when effusion dominates.
-- **Genuine hard case (26 cases)**. False negatives with no corroborating history or
-  co-occurrence story — treated at face value as legitimately subtle presentations.
-- **Ambiguous / unexplained (7 cases)**. Errors not attributable to any of the above under the
-  evidence rules, reported honestly as open.
+Four groups came out of it:
 
-**Illustrative case — patient 00000211**: 44 scans, Cardiomegaly-positive in 26. The model's
-cardiomegaly probability stays in a stable ~0.4–0.7 band across follow-up visits regardless of
-whether that visit's report restates "Cardiomegaly," including later visits where the label
-shifts to Effusion / No Finding / Fibrosis. This is consistent with the model tracking a stable
-signal across visits while the label intermittently drops the term — a concrete illustration of
-the label-noise mechanism, not a claim about the patient's actual condition.
+- **Candidate label noise, 30 cases.** High-confidence false positives where the same patient
+  is positive for the finding in their other scans. This fits how ChestX-ray14 was labeled,
+  per-report, where a chronic finding often isn't restated at every follow-up.
+- **Co-occurrence confusion, 27 cases.** The error tracks a correlated finding instead (Effusion
+  with Cardiomegaly, Emphysema with Pneumothorax). One thing I noticed: 9 of the 15 Cardiomegaly
+  false negatives also carry an Effusion label. My guess is the shared visual features pull
+  attention toward effusion, but I didn't test that, so it's just a guess.
+- **Genuine hard cases, 26 cases.** False negatives with no supporting patient history and no
+  co-occurrence story. I took these at face value as subtle presentations.
+- **Ambiguous, 7 cases.** Errors I couldn't attribute to any of the above under my own rules.
+  Left open.
+
+The clearest single example is patient 00000211: 44 scans, Cardiomegaly-positive in 26 of them.
+The model's cardiomegaly probability stays in a steady 0.4–0.7 band across the follow-ups
+whether or not that visit's report restates "Cardiomegaly," including later visits where the
+label switches to Effusion, No Finding, or Fibrosis. The model seems to be tracking something
+stable across the series while the label comes and goes. I can't say what it's tracking, and
+this isn't a claim about the patient's actual heart, but it's a tidy picture of the label-noise
+problem.
 
 ## Limitations
 
-- **In-distribution calibration**. Calibration is fit and evaluated within ChestX-ray14 (same
-  institution/scanners). Calibration is not guaranteed to transfer to other hospitals or
-  imaging equipment.
-- **Label-noise analysis is heuristic**. The taxonomy identifies cases consistent with label
-  noise using patient-history proxies; it does not prove any individual label is incorrect.
-  Conditions can genuinely change between visits.
-- **No radiologist review**. All failure analysis is evidence-based (labels, patient history,
-  co-occurrence), never a diagnostic read of the images.
-- **Underpowered subgroups**. The 80+ age group is too small (n=252) for reliable subgroup
-  metrics.
-- **ECE binning**. ECE uses fixed 10-bin equal-width binning, which is noisier for low-prevalence
-  classes; adaptive binning would be a robustness check.
+- The calibration is in-distribution. It's fit and tested inside ChestX-ray14, same institution
+  and scanners, so it won't necessarily hold on a different hospital's images.
+- The label-noise analysis is a heuristic. It flags cases that look consistent with label noise
+  from patient history. It doesn't prove any single label is wrong, and findings really can
+  change between visits.
+- There's no radiologist review anywhere in this. Everything in the failure analysis comes from
+  labels, patient history, and co-occurrence.
+- The 80+ age group is too small to support subgroup metrics.
+- ECE uses fixed 10-bin equal-width binning, which gets noisy on the low-prevalence classes.
+  Adaptive binning would be a better robustness check, and I didn't get to it.
 
 ## Repository
 
-| File                | Purpose                                                         |
-|---------------------|------------------------------------------------------------------|
-| `data.py`           | Dataset, official split, label encoding, age handling            |
-| `model.py`          | DenseNet-121 with 3-way multi-label head                         |
-| `train.py`          | Training loop (weighted BCE, MPS, best-checkpoint saving)        |
-| `evaluate.py`       | Test AUC, ECE, reliability diagrams, subgroup analysis           |
-| `calibrate.py`      | Temperature and Platt scaling (fit on val, applied to test)      |
-| `failure_analysis.py` | Surfaces highest-confidence errors for the taxonomy            |
+| File                  | Purpose                                                    |
+|-----------------------|-------------------------------------------------------------|
+| `data.py`             | Dataset, official split, label encoding, age handling      |
+| `model.py`            | DenseNet-121 with 3-way multi-label head                   |
+| `train.py`            | Training loop (weighted BCE, MPS, best-checkpoint saving)  |
+| `evaluate.py`         | Test AUC, ECE, reliability diagrams, subgroup analysis     |
+| `calibrate.py`        | Temperature and Platt scaling (fit on val, applied to test)|
+| `failure_analysis.py` | Surfaces highest-confidence errors for the taxonomy        |
 
-Environment: Python 3.10, PyTorch, Apple Silicon MPS. The dataset and checkpoints are
-gitignored.
+Python 3.10, PyTorch, Apple Silicon MPS. Dataset and checkpoints are gitignored.
 
 ### Reproduction
 
 ```bash
 conda activate cxr
 
-# Train (8 epochs used for the reported checkpoint; default is 10)
-python3 train.py --epochs 8
-
-# Evaluate: test AUC, calibration (raw/temperature/Platt), subgroup breakdowns
-python3 evaluate.py
-
-# Surface the 90 highest-confidence failure cases + manifest for the taxonomy
-python3 failure_analysis.py
+python3 train.py --epochs 8      # default is 10; I used 8, see the note above
+python3 evaluate.py              # test AUC, calibration, subgroup breakdowns
+python3 failure_analysis.py      # surfaces the 90 failure cases + manifest
 ```
 
-All three scripts default to `checkpoints/best_model.pt`; pass `--checkpoint <path>` to point at
-a different one. `train.py` also supports `--subset N` for a fast smoke test on a small slice of
-data before committing to a full run.
+All three default to `checkpoints/best_model.pt`; use `--checkpoint <path>` for another.
+`train.py` takes `--subset N` for a quick smoke test. Metrics will drift a little between runs
+from training randomness.
