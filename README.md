@@ -29,7 +29,7 @@ The three target findings (Pneumothorax, Effusion, Cardiomegaly) sit at roughly 
 
 I used the official patient-level split and checked that it's actually patient-disjoint (no
 patient in both train and test). The validation set is a 90/10 patient-disjoint carve-out of
-train_val, used for checkpoint selection and for fitting the calibration.
+`train_val`, used for checkpoint selection and for fitting the calibration.
 
 A few data issues I had to handle:
 - The labels are NLP-extracted from radiology reports, not checked by radiologists. That's a
