@@ -1,0 +1,91 @@
+image_index,class,error_type,pred_prob,label_pneumothorax,label_effusion,label_cardiomegaly,original_finding_labels,saved_filename
+00013111_065.png,Pneumothorax,FP,0.8071824908256531,0,0,0,Emphysema,pneumothorax_FP_p0.81_00013111_065.png
+00013111_057.png,Pneumothorax,FP,0.7852374315261841,0,0,0,Emphysema,pneumothorax_FP_p0.79_00013111_057.png
+00014358_013.png,Pneumothorax,FP,0.6711224913597107,0,0,0,Consolidation|Emphysema,pneumothorax_FP_p0.67_00014358_013.png
+00013111_070.png,Pneumothorax,FP,0.665955126285553,0,0,0,Atelectasis|Emphysema|Infiltration,pneumothorax_FP_p0.67_00013111_070.png
+00018249_014.png,Pneumothorax,FP,0.6535711288452148,0,0,0,No Finding,pneumothorax_FP_p0.65_00018249_014.png
+00012415_003.png,Pneumothorax,FP,0.6301036477088928,0,0,0,No Finding,pneumothorax_FP_p0.63_00012415_003.png
+00000467_012.png,Pneumothorax,FP,0.6254004836082458,0,0,0,Consolidation|Infiltration,pneumothorax_FP_p0.63_00000467_012.png
+00013391_004.png,Pneumothorax,FP,0.6224058270454407,0,0,0,Emphysema|Infiltration,pneumothorax_FP_p0.62_00013391_004.png
+00016607_005.png,Pneumothorax,FP,0.6191667318344116,0,0,0,No Finding,pneumothorax_FP_p0.62_00016607_005.png
+00013111_056.png,Pneumothorax,FP,0.6190329194068909,0,0,0,Emphysema|Mass,pneumothorax_FP_p0.62_00013111_056.png
+00014083_011.png,Pneumothorax,FP,0.6187873482704163,0,0,0,Emphysema,pneumothorax_FP_p0.62_00014083_011.png
+00027927_026.png,Pneumothorax,FP,0.6179296970367432,0,0,0,No Finding,pneumothorax_FP_p0.62_00027927_026.png
+00003803_008.png,Pneumothorax,FP,0.6169901490211487,0,0,0,No Finding,pneumothorax_FP_p0.62_00003803_008.png
+00026132_010.png,Pneumothorax,FP,0.6128079295158386,0,0,0,Consolidation,pneumothorax_FP_p0.61_00026132_010.png
+00028148_004.png,Pneumothorax,FP,0.6105880737304688,0,0,0,No Finding,pneumothorax_FP_p0.61_00028148_004.png
+00026392_007.png,Pneumothorax,FN,0.00011474884377093986,1,0,0,Emphysema|Pneumothorax,pneumothorax_FN_p0.00_00026392_007.png
+00017714_022.png,Pneumothorax,FN,0.0004918428021483123,1,0,0,Emphysema|Infiltration|Pneumothorax,pneumothorax_FN_p0.00_00017714_022.png
+00014525_016.png,Pneumothorax,FN,0.0005713347345590591,1,0,0,Pneumothorax,pneumothorax_FN_p0.00_00014525_016.png
+00025252_054.png,Pneumothorax,FN,0.0008484881254844368,1,1,0,Effusion|Pneumothorax,pneumothorax_FN_p0.00_00025252_054.png
+00026392_006.png,Pneumothorax,FN,0.0010520587675273418,1,0,0,Pneumothorax,pneumothorax_FN_p0.00_00026392_006.png
+00026392_004.png,Pneumothorax,FN,0.001163634005934,1,0,0,Pneumothorax,pneumothorax_FN_p0.00_00026392_004.png
+00025252_077.png,Pneumothorax,FN,0.001661457004956901,1,0,0,Edema|Infiltration|Pleural_Thickening|Pneumonia|Pneumothorax,pneumothorax_FN_p0.00_00025252_077.png
+00017714_007.png,Pneumothorax,FN,0.0016671869670972228,1,0,0,Pleural_Thickening|Pneumothorax,pneumothorax_FN_p0.00_00017714_007.png
+00022877_008.png,Pneumothorax,FN,0.002015999285504222,1,0,0,Infiltration|Pneumothorax,pneumothorax_FN_p0.00_00022877_008.png
+00026098_028.png,Pneumothorax,FN,0.0020842100493609905,1,1,0,Effusion|Pneumothorax,pneumothorax_FN_p0.00_00026098_028.png
+00011460_066.png,Pneumothorax,FN,0.0020883081015199423,1,0,0,Emphysema|Pneumothorax,pneumothorax_FN_p0.00_00011460_066.png
+00025252_032.png,Pneumothorax,FN,0.0021519185975193977,1,0,0,Pneumothorax,pneumothorax_FN_p0.00_00025252_032.png
+00025664_039.png,Pneumothorax,FN,0.002308459021151066,1,1,0,Atelectasis|Effusion|Infiltration|Pneumothorax,pneumothorax_FN_p0.00_00025664_039.png
+00027838_004.png,Pneumothorax,FN,0.00234767678193748,1,0,0,Mass|Pneumothorax,pneumothorax_FN_p0.00_00027838_004.png
+00025252_004.png,Pneumothorax,FN,0.0023763098288327456,1,1,0,Effusion|Infiltration|Pneumothorax,pneumothorax_FN_p0.00_00025252_004.png
+00017151_011.png,Effusion,FP,0.891356348991394,0,0,0,No Finding,effusion_FP_p0.89_00017151_011.png
+00022837_001.png,Effusion,FP,0.877204179763794,0,0,0,No Finding,effusion_FP_p0.88_00022837_001.png
+00021840_010.png,Effusion,FP,0.8746180534362793,0,0,0,No Finding,effusion_FP_p0.87_00021840_010.png
+00007557_008.png,Effusion,FP,0.8706610202789307,0,0,0,No Finding,effusion_FP_p0.87_00007557_008.png
+00020113_006.png,Effusion,FP,0.869775652885437,0,0,0,No Finding,effusion_FP_p0.87_00020113_006.png
+00020113_015.png,Effusion,FP,0.8650575280189514,0,0,0,No Finding,effusion_FP_p0.87_00020113_015.png
+00007120_000.png,Effusion,FP,0.8572359085083008,0,0,0,Infiltration|Mass|Nodule,effusion_FP_p0.86_00007120_000.png
+00029596_017.png,Effusion,FP,0.8560075759887695,0,0,0,No Finding,effusion_FP_p0.86_00029596_017.png
+00022416_045.png,Effusion,FP,0.8552414774894714,0,0,0,Consolidation,effusion_FP_p0.86_00022416_045.png
+00007557_011.png,Effusion,FP,0.8478938341140747,1,0,0,Pneumothorax,effusion_FP_p0.85_00007557_011.png
+00022572_063.png,Effusion,FP,0.8465337157249451,0,0,0,Nodule,effusion_FP_p0.85_00022572_063.png
+00017606_004.png,Effusion,FP,0.8424832820892334,0,0,0,No Finding,effusion_FP_p0.84_00017606_004.png
+00012834_043.png,Effusion,FP,0.8409911394119263,0,0,0,Infiltration,effusion_FP_p0.84_00012834_043.png
+00011814_020.png,Effusion,FP,0.8295193910598755,0,0,0,No Finding,effusion_FP_p0.83_00011814_020.png
+00017606_045.png,Effusion,FP,0.8269814848899841,0,0,0,Infiltration,effusion_FP_p0.83_00017606_045.png
+00015666_004.png,Effusion,FN,0.0009206412360072136,0,1,0,Effusion,effusion_FN_p0.00_00015666_004.png
+00003062_014.png,Effusion,FN,0.0019284135196357965,0,1,0,Atelectasis|Effusion|Pleural_Thickening,effusion_FN_p0.00_00003062_014.png
+00008814_000.png,Effusion,FN,0.0024939076974987984,0,1,0,Effusion,effusion_FN_p0.00_00008814_000.png
+00015605_009.png,Effusion,FN,0.00262158433906734,0,1,0,Effusion,effusion_FN_p0.00_00015605_009.png
+00027094_006.png,Effusion,FN,0.002816402819007635,0,1,1,Cardiomegaly|Effusion,effusion_FN_p0.00_00027094_006.png
+00028873_010.png,Effusion,FN,0.0028358609415590763,0,1,1,Cardiomegaly|Effusion,effusion_FN_p0.00_00028873_010.png
+00025969_002.png,Effusion,FN,0.0033091355580836535,0,1,1,Cardiomegaly|Effusion,effusion_FN_p0.00_00025969_002.png
+00004931_017.png,Effusion,FN,0.003550109453499317,0,1,0,Effusion|Infiltration,effusion_FN_p0.00_00004931_017.png
+00007046_010.png,Effusion,FN,0.0036279575433582067,0,1,0,Effusion,effusion_FN_p0.00_00007046_010.png
+00016937_019.png,Effusion,FN,0.003691007848829031,0,1,0,Effusion|Infiltration,effusion_FN_p0.00_00016937_019.png
+00015442_025.png,Effusion,FN,0.004032987169921398,0,1,1,Cardiomegaly|Effusion|Pleural_Thickening,effusion_FN_p0.00_00015442_025.png
+00006713_000.png,Effusion,FN,0.004793590400367975,0,1,0,Effusion|Nodule,effusion_FN_p0.00_00006713_000.png
+00022215_013.png,Effusion,FN,0.005219962447881699,0,1,0,Effusion,effusion_FN_p0.01_00022215_013.png
+00009507_003.png,Effusion,FN,0.006206142716109753,0,1,0,Effusion|Hernia,effusion_FN_p0.01_00009507_003.png
+00013615_067.png,Effusion,FN,0.006911375094205141,0,1,0,Effusion|Infiltration,effusion_FN_p0.01_00013615_067.png
+00000211_031.png,Cardiomegaly,FP,0.6856831312179565,0,0,0,Fibrosis|Pleural_Thickening,cardiomegaly_FP_p0.69_00000211_031.png
+00000211_030.png,Cardiomegaly,FP,0.6531669497489929,0,0,0,No Finding,cardiomegaly_FP_p0.65_00000211_030.png
+00000211_032.png,Cardiomegaly,FP,0.6368787884712219,0,1,0,Effusion,cardiomegaly_FP_p0.64_00000211_032.png
+00011136_006.png,Cardiomegaly,FP,0.596489667892456,0,1,0,Effusion|Infiltration,cardiomegaly_FP_p0.60_00011136_006.png
+00002763_012.png,Cardiomegaly,FP,0.5951440930366516,0,1,0,Effusion|Infiltration,cardiomegaly_FP_p0.60_00002763_012.png
+00004533_000.png,Cardiomegaly,FP,0.5820525884628296,0,0,0,Consolidation|Infiltration,cardiomegaly_FP_p0.58_00004533_000.png
+00000211_003.png,Cardiomegaly,FP,0.5788366794586182,0,0,0,No Finding,cardiomegaly_FP_p0.58_00000211_003.png
+00000211_027.png,Cardiomegaly,FP,0.5678848624229431,0,1,0,Effusion|Pleural_Thickening,cardiomegaly_FP_p0.57_00000211_027.png
+00006481_016.png,Cardiomegaly,FP,0.5675612688064575,0,0,0,No Finding,cardiomegaly_FP_p0.57_00006481_016.png
+00019426_003.png,Cardiomegaly,FP,0.5576675534248352,0,0,0,No Finding,cardiomegaly_FP_p0.56_00019426_003.png
+00001373_004.png,Cardiomegaly,FP,0.5565599799156189,0,0,0,Consolidation,cardiomegaly_FP_p0.56_00001373_004.png
+00000211_028.png,Cardiomegaly,FP,0.5353614091873169,0,1,0,Effusion,cardiomegaly_FP_p0.54_00000211_028.png
+00002763_017.png,Cardiomegaly,FP,0.5256014466285706,0,1,0,Effusion,cardiomegaly_FP_p0.53_00002763_017.png
+00000211_023.png,Cardiomegaly,FP,0.5187756419181824,1,0,0,Pneumothorax,cardiomegaly_FP_p0.52_00000211_023.png
+00000211_029.png,Cardiomegaly,FP,0.5153653621673584,0,1,0,Effusion,cardiomegaly_FP_p0.52_00000211_029.png
+00015646_026.png,Cardiomegaly,FN,0.00022400784655474126,1,0,1,Cardiomegaly|Infiltration|Pneumothorax,cardiomegaly_FN_p0.00_00015646_026.png
+00018496_009.png,Cardiomegaly,FN,0.00040116714080795646,0,1,1,Atelectasis|Cardiomegaly|Effusion,cardiomegaly_FN_p0.00_00018496_009.png
+00028499_015.png,Cardiomegaly,FN,0.000560761836823076,0,1,1,Cardiomegaly|Effusion,cardiomegaly_FN_p0.00_00028499_015.png
+00025969_002.png,Cardiomegaly,FN,0.0007396437576971948,0,1,1,Cardiomegaly|Effusion,cardiomegaly_FN_p0.00_00025969_002.png
+00014346_001.png,Cardiomegaly,FN,0.0008054816862568259,1,0,1,Cardiomegaly|Pneumothorax,cardiomegaly_FN_p0.00_00014346_001.png
+00027935_002.png,Cardiomegaly,FN,0.0008127205073833466,0,0,1,Cardiomegaly|Infiltration,cardiomegaly_FN_p0.00_00027935_002.png
+00028873_010.png,Cardiomegaly,FN,0.000854506331961602,0,1,1,Cardiomegaly|Effusion,cardiomegaly_FN_p0.00_00028873_010.png
+00001582_006.png,Cardiomegaly,FN,0.0009300785604864359,0,1,1,Cardiomegaly|Effusion,cardiomegaly_FN_p0.00_00001582_006.png
+00014346_002.png,Cardiomegaly,FN,0.0010530800791457295,1,0,1,Cardiomegaly|Pneumothorax,cardiomegaly_FN_p0.00_00014346_002.png
+00018921_017.png,Cardiomegaly,FN,0.0013977959752082825,1,0,1,Cardiomegaly|Infiltration|Nodule|Pneumothorax,cardiomegaly_FN_p0.00_00018921_017.png
+00018921_056.png,Cardiomegaly,FN,0.001525609870441258,0,0,1,Cardiomegaly,cardiomegaly_FN_p0.00_00018921_056.png
+00015956_010.png,Cardiomegaly,FN,0.0017969837645068765,0,1,1,Cardiomegaly|Effusion|Nodule,cardiomegaly_FN_p0.00_00015956_010.png
+00021711_005.png,Cardiomegaly,FN,0.001849680906161666,0,1,1,Atelectasis|Cardiomegaly|Effusion|Infiltration|Pleural_Thickening,cardiomegaly_FN_p0.00_00021711_005.png
+00017036_007.png,Cardiomegaly,FN,0.0019341541919857264,0,1,1,Cardiomegaly|Effusion|Mass,cardiomegaly_FN_p0.00_00017036_007.png
+00027094_006.png,Cardiomegaly,FN,0.0019515611929818988,0,1,1,Cardiomegaly|Effusion,cardiomegaly_FN_p0.00_00027094_006.png
